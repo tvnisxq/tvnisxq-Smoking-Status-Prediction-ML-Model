@@ -1,0 +1,71 @@
+{
+    "ml_olympiad": {
+        "metrics": {
+            "accuracy": 0.7659432518347004,
+            "precision": 0.7237476971664181,
+            "recall": 0.745594215996385,
+            "f1": 0.7345085470085471,
+            "roc_auc": 0.8492827482944341
+        },
+        "n_features_selected": 23,
+        "features": [
+            "age",
+            "height(cm)",
+            "weight(kg)",
+            "systolic",
+            "relaxation",
+            "Cholesterol",
+            "triglyceride",
+            "HDL",
+            "LDL",
+            "hemoglobin",
+            "serum creatinine",
+            "AST",
+            "ALT",
+            "Gtp",
+            "dental caries",
+            "health_poly_0",
+            "health_poly_1",
+            "health_poly_4",
+            "health_poly_13",
+            "bmi",
+            "liver_function",
+            "hdl_ldl_ratio",
+            "ast_alt_ratio"
+        ]
+    },
+    "archive": {
+        "metrics": {
+            "accuracy": 0.6814684193651811,
+            "precision": 0.5391104294478528,
+            "recall": 0.919755778456171,
+            "f1": 0.6797743755036261,
+            "roc_auc": 0.8011245997489467
+        },
+        "n_features_selected": 22,
+        "features": [
+            "age",
+            "height(cm)",
+            "weight(kg)",
+            "waist(cm)",
+            "systolic",
+            "relaxation",
+            "fasting blood sugar",
+            "triglyceride",
+            "HDL",
+            "LDL",
+            "hemoglobin",
+            "serum creatinine",
+            "ALT",
+            "Gtp",
+            "dental caries",
+            "health_poly_0",
+            "health_poly_4",
+            "health_poly_5",
+            "bmi",
+            "liver_function",
+            "hdl_ldl_ratio",
+            "ast_alt_ratio"
+        ]
+    }
+}

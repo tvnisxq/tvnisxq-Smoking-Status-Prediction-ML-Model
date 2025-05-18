@@ -1,0 +1,17 @@
+/* Yellow background for GET button */
+.swagger-ui .opblock-get .opblock-summary-method {
+    background: #facc15 !important;  /* Tailwind yellow-400 */
+    color: black !important;
+}
+
+/* Pink background for POST button (if any) */
+.swagger-ui .opblock-post .opblock-summary-method {
+    background: #ec4899 !important;  /* Tailwind pink-500 */
+    color: white !important;
+}
+
+/* Optional: Change font size and boldness of summary descriptions */
+.swagger-ui .opblock-tag {
+    font-size: 20px !important;
+    font-weight: bold !important;
+}

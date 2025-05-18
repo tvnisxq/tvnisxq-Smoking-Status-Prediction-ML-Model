@@ -1,0 +1,73 @@
+{
+    "ml_olympiad": {
+        "model_name": "XGBoost",
+        "metrics": {
+            "accuracy": 0.777716730112633,
+            "precision": 0.7202512030013866,
+            "recall": 0.7981021238138274,
+            "f1": 0.7571808282603104,
+            "roc_auc": 0.8605521623812072
+        },
+        "num_features": 23,
+        "features": [
+            "id",
+            "age",
+            "height(cm)",
+            "weight(kg)",
+            "waist(cm)",
+            "eyesight(left)",
+            "eyesight(right)",
+            "hearing(left)",
+            "hearing(right)",
+            "systolic",
+            "relaxation",
+            "fasting blood sugar",
+            "Cholesterol",
+            "triglyceride",
+            "HDL",
+            "LDL",
+            "hemoglobin",
+            "Urine protein",
+            "serum creatinine",
+            "AST",
+            "ALT",
+            "Gtp",
+            "dental caries"
+        ]
+    },
+    "archive": {
+        "model_name": "Random_Forest",
+        "metrics": {
+            "accuracy": 0.7723629368387304,
+            "precision": 0.6956521739130435,
+            "recall": 0.6768425643262101,
+            "f1": 0.6861184792219275,
+            "roc_auc": 0.863041537671549
+        },
+        "num_features": 22,
+        "features": [
+            "age",
+            "height(cm)",
+            "weight(kg)",
+            "waist(cm)",
+            "eyesight(left)",
+            "eyesight(right)",
+            "hearing(left)",
+            "hearing(right)",
+            "systolic",
+            "relaxation",
+            "fasting blood sugar",
+            "Cholesterol",
+            "triglyceride",
+            "HDL",
+            "LDL",
+            "hemoglobin",
+            "Urine protein",
+            "serum creatinine",
+            "AST",
+            "ALT",
+            "Gtp",
+            "dental caries"
+        ]
+    }
+}

@@ -1,0 +1,3 @@
+"""
+SmokingML package initialization
+"""

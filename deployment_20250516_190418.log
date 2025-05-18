@@ -1,0 +1,9 @@
+2025-05-16 19:04:18,548 - src.components.model_deployment - INFO - Using model path: Y:\SmokingML V2\models
+2025-05-16 19:04:18,553 - src.components.model_deployment - INFO - Starting model loading from Y:\SmokingML V2\models
+2025-05-16 19:04:18,553 - src.components.model_deployment - INFO - Found model files: ['archive_Gradient_Boosting.pkl', 'archive_improved_final.pkl', 'archive_improved_RandomForestClassifier.pkl', 'archive_Logistic_Regression.pkl', 'archive_Random_Forest.pkl', 'archive_Random_Forest_optimized.pkl', 'archive_XGBoost.pkl', 'ml_olympiad_Gradient_Boosting.pkl', 'ml_olympiad_improved_final.pkl', 'ml_olympiad_improved_XGBClassifier.pkl', 'ml_olympiad_Logistic_Regression.pkl', 'ml_olympiad_Random_Forest.pkl', 'ml_olympiad_XGBoost.pkl', 'ml_olympiad_XGBoost_optimized.pkl']
+2025-05-16 19:04:18,555 - src.components.model_deployment - INFO - Loading model archive_improved_final from Y:\SmokingML V2\models\archive_improved_final.pkl
+2025-05-16 19:04:18,893 - src.components.model_deployment - INFO - Successfully loaded model: archive_improved_final
+2025-05-16 19:04:18,894 - src.components.model_deployment - INFO - Loading model ml_olympiad_improved_final from Y:\SmokingML V2\models\ml_olympiad_improved_final.pkl
+2025-05-16 19:04:18,905 - src.components.model_deployment - INFO - Successfully loaded model: ml_olympiad_improved_final
+2025-05-16 19:04:18,905 - src.components.model_deployment - INFO - All models loaded successfully
+2025-05-16 19:05:39,704 - src.components.model_deployment - INFO - Cleaning up models

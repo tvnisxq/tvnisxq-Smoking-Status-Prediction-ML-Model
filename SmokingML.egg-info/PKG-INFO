@@ -1,0 +1,9 @@
+Metadata-Version: 2.4
+Name: SmokingML
+Version: 0.1
+Requires-Dist: pandas
+Requires-Dist: numpy
+Requires-Dist: scikit-learn
+Requires-Dist: seaborn
+Requires-Dist: matplotlib
+Dynamic: requires-dist

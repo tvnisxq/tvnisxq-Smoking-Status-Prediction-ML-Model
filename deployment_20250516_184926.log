@@ -1,0 +1,14 @@
+2025-05-16 18:49:26,524 - src.components.model_deployment - INFO - Using model path: Y:\SmokingML V2\models
+2025-05-16 18:49:26,529 - src.components.model_deployment - INFO - Starting model loading from Y:\SmokingML V2\models
+2025-05-16 18:49:26,529 - src.components.model_deployment - INFO - Found model files: ['archive_Gradient_Boosting.pkl', 'archive_improved_final.pkl', 'archive_improved_RandomForestClassifier.pkl', 'archive_Logistic_Regression.pkl', 'archive_Random_Forest.pkl', 'archive_Random_Forest_optimized.pkl', 'archive_XGBoost.pkl', 'ml_olympiad_Gradient_Boosting.pkl', 'ml_olympiad_improved_final.pkl', 'ml_olympiad_improved_XGBClassifier.pkl', 'ml_olympiad_Logistic_Regression.pkl', 'ml_olympiad_Random_Forest.pkl', 'ml_olympiad_XGBoost.pkl', 'ml_olympiad_XGBoost_optimized.pkl']
+2025-05-16 18:49:26,531 - src.components.model_deployment - INFO - Loading model archive_improved_final from Y:\SmokingML V2\models\archive_improved_final.pkl
+2025-05-16 18:49:26,941 - src.components.model_deployment - INFO - Successfully loaded model: archive_improved_final
+2025-05-16 18:49:26,941 - src.components.model_deployment - INFO - Loading model ml_olympiad_improved_final from Y:\SmokingML V2\models\ml_olympiad_improved_final.pkl
+2025-05-16 18:49:26,952 - src.components.model_deployment - INFO - Successfully loaded model: ml_olympiad_improved_final
+2025-05-16 18:49:26,952 - src.components.model_deployment - INFO - All models loaded successfully
+2025-05-16 18:51:31,599 - src.components.model_deployment - INFO - Health check endpoint accessed
+2025-05-16 18:51:33,641 - src.components.model_deployment - INFO - Health check endpoint accessed
+2025-05-16 18:51:35,665 - src.components.model_deployment - INFO - Prediction requested for model: archive_improved_final
+2025-05-16 18:51:35,676 - src.components.model_deployment - DEBUG - Input data: {'height(cm)': {0: 170.0}, 'weight(kg)': {0: 70.0}, 'waist(cm)': {0: 85.0}, 'age': {0: 35.0}, 'ALT': {0: 25.0}, 'Gtp': {0: 30.0}, 'HDL': {0: 50.0}, 'systolic': {0: 120.0}, 'relaxation': {0: 80.0}, 'hemoglobin': {0: 15.0}, 'serum creatinine': {0: 1.0}, 'triglyceride': {0: 150.0}, 'AST': {0: 0.0}, 'dental caries': {0: 0}, 'eyesight(right)': {0: 1.0}, 'eyesight(left)': {0: 1.0}, 'fasting blood sugar': {0: 90.0}}
+2025-05-16 18:51:35,680 - src.components.model_deployment - DEBUG - Advanced features calculated successfully
+2025-05-16 18:51:35,695 - src.components.model_deployment - ERROR - Error making prediction: X has 25 features, but RandomForestClassifier is expecting 22 features as input.

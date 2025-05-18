@@ -1,0 +1,61 @@
+{
+    "ml_olympiad": {
+        "name": "XGBoost",
+        "features": [
+            "id",
+            "age",
+            "height(cm)",
+            "weight(kg)",
+            "waist(cm)",
+            "eyesight(left)",
+            "eyesight(right)",
+            "hearing(left)",
+            "hearing(right)",
+            "systolic",
+            "relaxation",
+            "fasting blood sugar",
+            "Cholesterol",
+            "triglyceride",
+            "HDL",
+            "LDL",
+            "hemoglobin",
+            "Urine protein",
+            "serum creatinine",
+            "AST",
+            "ALT",
+            "Gtp",
+            "dental caries"
+        ],
+        "accuracy": 0.777716730112633,
+        "model_path": "models/ml_olympiad_XGBoost.pkl"
+    },
+    "archive": {
+        "name": "Random_Forest",
+        "features": [
+            "age",
+            "height(cm)",
+            "weight(kg)",
+            "waist(cm)",
+            "eyesight(left)",
+            "eyesight(right)",
+            "hearing(left)",
+            "hearing(right)",
+            "systolic",
+            "relaxation",
+            "fasting blood sugar",
+            "Cholesterol",
+            "triglyceride",
+            "HDL",
+            "LDL",
+            "hemoglobin",
+            "Urine protein",
+            "serum creatinine",
+            "AST",
+            "ALT",
+            "Gtp",
+            "dental caries"
+        ],
+        "accuracy": 0.7723629368387304,
+        "model_path": "models/archive_Random_Forest.pkl"
+    }
+}
