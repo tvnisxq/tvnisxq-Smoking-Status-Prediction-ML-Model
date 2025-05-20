@@ -7,36 +7,54 @@ import traceback
 from pathlib import Path
 from datetime import datetime
 from requests.exceptions import ConnectionError, Timeout
+import unittest
+import pandas as pd
+from src.components.model_deployment import ModelDeployment
+from src.components.feature_engineering import FeatureEngineer
 
-# Configure logging with absolute paths and immediate output
+# Define log directories
 BASE_DIR = Path(__file__).parent.parent
 LOG_DIR = BASE_DIR / 'logs'
+TEST_LOG_DIR = LOG_DIR / 'tests'
+DEPLOYMENT_LOG_DIR = LOG_DIR / 'deployment'
+ERROR_LOG_DIR = LOG_DIR / 'errors'
+
+# Create log directories
 LOG_DIR.mkdir(exist_ok=True)
+TEST_LOG_DIR.mkdir(exist_ok=True)
+DEPLOYMENT_LOG_DIR.mkdir(exist_ok=True)
+ERROR_LOG_DIR.mkdir(exist_ok=True)
 
 # Create a custom formatter
 formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
 
-# Create and configure file handler
-file_handler = logging.FileHandler(LOG_DIR / 'deployment_test.log')
-file_handler.setFormatter(formatter)
+# Configure file handlers
+test_handler = logging.FileHandler(TEST_LOG_DIR / f'test_{datetime.now().strftime("%Y%m%d")}.log')
+test_handler.setFormatter(formatter)
 
-# Create and configure console handler with immediate flush
+deployment_handler = logging.FileHandler(DEPLOYMENT_LOG_DIR / f'deployment_{datetime.now().strftime("%Y%m%d")}.log')
+deployment_handler.setFormatter(formatter)
+
+error_handler = logging.FileHandler(ERROR_LOG_DIR / f'error_{datetime.now().strftime("%Y%m%d")}.log')
+error_handler.setLevel(logging.ERROR)
+error_handler.setFormatter(formatter)
+
+# Configure console handler with immediate flush
 console_handler = logging.StreamHandler(sys.stdout)
 console_handler.setFormatter(formatter)
 
 # Configure root logger
 root_logger = logging.getLogger()
 root_logger.setLevel(logging.INFO)
-root_logger.addHandler(file_handler)
+root_logger.addHandler(test_handler)
+root_logger.addHandler(deployment_handler)
+root_logger.addHandler(error_handler)
 root_logger.addHandler(console_handler)
-
-# Force immediate output
-sys.stdout.flush()
 
 def write_error_to_file(error_msg):
     """Write error message to a timestamped file"""
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    error_file = f"error_log_{timestamp}.txt"
+    error_file = ERROR_LOG_DIR / f"error_{timestamp}.txt"
     with open(error_file, "w") as f:
         f.write(f"=== Error Log {timestamp} ===\n")
         f.write(error_msg)
@@ -198,6 +216,52 @@ Traceback:
 """
         write_error_to_file(error_msg)
         return False
+
+class TestModelDeployment(unittest.TestCase):
+    def setUp(self):
+        self.deployment = ModelDeployment()
+        self.sample_input = {
+            "age": 25,
+            "height": 170,
+            "weight": 70,
+            "waist": 80,
+            "eyesight_left": 1.0,
+            "eyesight_right": 1.0,
+            "hearing_left": 1,
+            "hearing_right": 1,
+            "systolic": 120,
+            "relaxation": 80,
+            "fasting_blood_sugar": 90,
+            "cholesterol": 200,
+            "triglyceride": 150,
+            "hdl": 50,
+            "ldl": 100,
+            "hemoglobin": 14,
+            "urine_protein": 1,
+            "serum_creatinine": 0.9,
+            "ast": 25,
+            "alt": 25,
+            "gtp": 30,
+            "dental_caries": 0
+        }
+
+    async def test_prediction_pipeline(self):
+        result = await self.deployment.predict(self.sample_input)
+        self.assertIn('prediction', result)
+        self.assertIn('probability', result)
+        self.assertIn('status', result)
+        self.assertEqual(result['status'], 'success')
+        self.assertIsInstance(result['prediction'], int)
+        self.assertIsInstance(result['probability'], float)
+
+    def test_feature_engineering(self):
+        df = pd.DataFrame([self.sample_input])
+        engineered_df = self.deployment.feature_engineer.transform(df)
+        
+        # Verify that all expected engineered features are present
+        expected_features = ['bmi', 'blood_pressure_category', 'cholesterol_ratio']
+        for feature in expected_features:
+            self.assertIn(feature, engineered_df.columns)
 
 if __name__ == "__main__":
     try:

@@ -1,12 +1,37 @@
-import subprocess
-import time
-import sys
 import os
-import signal
-import psutil
-import requests
 import json
+import sys
+import time
+import requests
 from pathlib import Path
+import subprocess
+import logging
+from datetime import datetime
+import psutil
+import signal
+
+# Define log directories
+BASE_DIR = Path(__file__).parent
+LOG_DIR = BASE_DIR / 'logs'
+TEST_LOG_DIR = LOG_DIR / 'tests'
+SERVER_LOG_DIR = LOG_DIR / 'server'
+RESULTS_DIR = LOG_DIR / 'results'
+
+# Create log directories
+LOG_DIR.mkdir(exist_ok=True)
+TEST_LOG_DIR.mkdir(exist_ok=True)
+SERVER_LOG_DIR.mkdir(exist_ok=True)
+RESULTS_DIR.mkdir(exist_ok=True)
+
+# Configure logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s',
+    handlers=[
+        logging.FileHandler(TEST_LOG_DIR / f'deployment_test_{datetime.now().strftime("%Y%m%d")}.log'),
+        logging.StreamHandler(sys.stdout)
+    ]
+)
 
 def kill_process_by_port(port):
     """Kill any process using the specified port"""
@@ -14,30 +39,33 @@ def kill_process_by_port(port):
         try:
             for conns in psutil.Process(proc.info['pid']).connections(kind='inet'):
                 if conns.laddr.port == port:
-                    print(f"Killing process {proc.info['pid']} using port {port}")
+                    logging.info(f"Killing process {proc.info['pid']} using port {port}")
                     os.kill(proc.info['pid'], signal.SIGTERM)
         except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess):
             pass
 
 def main():
-    # Kill any process using port 8000
-    kill_process_by_port(8000)
-    
-    # Start the FastAPI server
-    print("Starting FastAPI server...")
-    server_process = subprocess.Popen(
-        ["uvicorn", "src.components.model_deployment:app", "--host", "0.0.0.0", "--port", "8000", "--log-level", "debug"],
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-        text=True
-    )
-    
-    # Wait for server to start
-    print("Waiting for server to start...")
-    time.sleep(5)
-    
+    """Run deployment tests"""
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     results = []
+    
     try:
+        # Kill any process using port 8000
+        kill_process_by_port(8000)
+        
+        # Start the server
+        logging.info("Starting FastAPI server...")
+        server_process = subprocess.Popen(
+            ["uvicorn", "src.components.model_deployment:app", "--reload", "--host", "0.0.0.0", "--port", "8000"],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True
+        )
+        
+        # Wait for server to start
+        time.sleep(5)
+        logging.info("Server started. Running tests...")
+        
         # Test health endpoint
         health_response = requests.get("http://localhost:8000/health")
         results.append({
@@ -91,26 +119,24 @@ def main():
             "status": "failed",
             "error": str(e)
         })
+        logging.error(f"Test failed with error: {str(e)}")
     
     finally:
         # Stop the server
         server_process.terminate()
         
-        # Write results to file
-        Path('deployment_test_results.json').write_text(
-            json.dumps(results, indent=2)
-        )
+        # Save test results
+        results_file = RESULTS_DIR / f'deployment_test_results_{timestamp}.json'
+        results_file.write_text(json.dumps(results, indent=2))
         
-        # Print server output
+        # Save server output
         stdout, stderr = server_process.communicate()
-        Path('server_output.log').write_text(
-            f"STDOUT:\n{stdout}\n\nSTDERR:\n{stderr}"
-        )
+        server_log = SERVER_LOG_DIR / f'server_output_{timestamp}.log'
+        with open(server_log, 'w') as f:
+            f.write(f"STDOUT:\n{stdout}\n\nSTDERR:\n{stderr}")
+        
+        logging.info(f"Test results saved to {results_file}")
+        logging.info(f"Server output saved to {server_log}")
 
 if __name__ == "__main__":
-    try:
-        success = main()
-        sys.exit(0 if success else 1)
-    except Exception as e:
-        print(f"Error running tests: {str(e)}")
-        sys.exit(1)
+    main()
