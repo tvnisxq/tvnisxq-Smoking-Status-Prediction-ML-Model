@@ -1,0 +1,33 @@
+{
+    "health_indicators": [
+        {
+            "name": "bmi",
+            "formula": "weight_kg / ((height_cm/100) ** 2)",
+            "enabled": true,
+            "description": "Body Mass Index",
+            "degree": 2
+        },
+        {
+            "name": "liver_function",
+            "formula": "(AST + ALT + Gtp) / 3",
+            "enabled": true,
+            "description": "Liver function indicator",
+            "degree": 2
+        }
+    ],
+    "polynomial_features": [
+        "bmi",
+        "liver_function",
+        "age"
+    ],
+    "feature_ratios": [
+        {
+            "name": "hdl_ldl_ratio",
+            "formula": "HDL / (LDL + 1)",
+            "enabled": true,
+            "description": "HDL to LDL ratio",
+            "degree": 2
+        }
+    ],
+    "polynomial_degree": 2
+}

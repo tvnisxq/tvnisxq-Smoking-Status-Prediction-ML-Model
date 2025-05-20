@@ -1,0 +1,24 @@
+{
+    "health_indicators": [
+        {
+            "name": "string",
+            "formula": "string",
+            "enabled": false,
+            "description": "string",
+            "degree": 2
+        }
+    ],
+    "polynomial_features": [
+        "string"
+    ],
+    "feature_ratios": [
+        {
+            "name": "string",
+            "formula": "string",
+            "enabled": true,
+            "description": "string",
+            "degree": 2
+        }
+    ],
+    "polynomial_degree": 2
+}
