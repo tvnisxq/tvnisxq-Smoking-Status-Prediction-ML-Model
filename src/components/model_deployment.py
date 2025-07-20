@@ -1,5 +1,5 @@
 
-
+#? STAGE 8: MODEL DEPLOYMENT 
 
 from fastapi import FastAPI, HTTPException, Path, Body
 from fastapi.middleware.cors import CORSMiddleware
@@ -17,11 +17,11 @@ from sklearn.preprocessing import PolynomialFeatures
 from typing import Optional, List, Dict
 from contextlib import asynccontextmanager
 import socket
+import uvicorn
 from fastapi.openapi.docs import get_swagger_ui_html
 from fastapi.responses import HTMLResponse
 import json
 from .feature_engineering import FeatureEngineer
-
 
 # Configure logging to both file and console with maximum verbosity
 LOG_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'logs')
@@ -95,7 +95,7 @@ class ModelParameters(BaseModel):
             "example": DEFAULT_MODEL_PARAMETERS
         }
 
-# Define lifespan to load only the best models
+# Define lifespan to load models and handle startup logging
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     try:
@@ -123,7 +123,7 @@ async def lifespan(app: FastAPI):
                     models[model_name] = model_artifacts['model']
                     logger.info(f"Successfully loaded model: {model_name}")
                 except Exception as e:
-                    logger.error(f"Error loading model {model_name}: {str(e)}")
+                    logger.error(f"Error loading model {model_name}: {str(e)}", exc_info=True)
                     raise
                     
         if not models:
@@ -131,16 +131,27 @@ async def lifespan(app: FastAPI):
             logger.error(error_msg)
             raise Exception(error_msg)
             
-        logger.info("All models loaded successfully")
+        # Startup logging
+        logger.info("=== Server Starting ===")
+        logger.info(get_ip())
+        logger.info("You can access the API at:")
+        logger.info("    http://127.0.0.1:8000")
+        logger.info("    http://localhost:8000")
+        logger.info("API documentation available at:")
+        logger.info("    http://127.0.0.1:8000/docs")
+        logger.info("    http://localhost:8000/docs")
+        logger.info("Try both URLs if one doesn't work")
+        
+        logger.info("All models loaded successfully. Ready to serve.")
     except Exception as e:
-        logger.error(f"Error during startup: {str(e)}")
+        logger.error(f"Error during startup: {str(e)}", exc_info=True)
         raise e
     yield
     # Cleanup
     logger.info("Cleaning up models")
     models.clear()
 
-# Initialize FastAPI app with lifespan and custom startup message
+# Initialize FastAPI app with lifespan
 app = FastAPI(
     lifespan=lifespan,
     title="Smoking Status Prediction API",
@@ -169,19 +180,6 @@ def get_ip():
         return f"Hostname: {hostname}, Local IP: {local_ip}"
     except Exception as e:
         return f"Could not determine IP: {str(e)}"
-
-@app.on_event("startup")
-async def startup_event():
-    """Print detailed access information on startup"""
-    logger.info("=== Server Starting ===")
-    logger.info(get_ip())
-    logger.info("You can access the API at:")
-    logger.info("    http://127.0.0.1:8000")
-    logger.info("    http://localhost:8000")
-    logger.info("API documentation available at:")
-    logger.info("    http://127.0.0.1:8000/docs")
-    logger.info("    http://localhost:8000/docs")
-    logger.info("Try both URLs if one doesn't work")
 
 # Custom OpenAPI schema
 def custom_openapi():
@@ -370,7 +368,6 @@ async def predict(
 
         try:
             # 1. Initialize all required numeric columns with safe defaults
-
             default_values = {
                 'systolic': data.get('systolic', [0.0])[0],
                 'triglyceride': data.get('triglyceride', [0.0])[0],
@@ -835,7 +832,7 @@ async def update_model_parameters(
         return {
             "status": "success",
             "message": f"Parameters updated successfully for model: {model_name}",
-            "model": model_name,  # Changed from BEST_MODELS[model_name] as it's not defined in the code
+            "model": model_name,
             "updated_parameters": updated_params,
             "current_parameters": model_parameters[model_name]
         }
@@ -845,3 +842,6 @@ async def update_model_parameters(
         error_msg = f"Failed to update model parameters: {str(e)}"
         logger.error(error_msg)
         raise HTTPException(status_code=500, detail={"error": error_msg})
+
+if __name__ == "__main__":
+    uvicorn.run(app, host="0.0.0.0", port=8000, reload=True)
