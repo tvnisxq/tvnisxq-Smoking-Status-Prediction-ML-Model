@@ -3,6 +3,16 @@
 ## Project Overview
 An advanced machine learning system that predicts smoking behavior using health indicators and demographic data. The project implements multiple sophisticated ML models with extensive feature engineering and optimization techniques.
 
+
+
+
+![ROC Curve](artifacts/visualizations/roc_curve_archive_Random_Forest.png)
+
+
+
+
+
+
 ## 🌟 Key Features
 - **Advanced Feature Engineering**
   - BMI calculation and health risk indicators
